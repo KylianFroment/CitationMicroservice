@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citation du jour</title>
+</head>
+<body>
+    <h1>Citation du jour</h1>
+    <p>{{ citation }}</p>
+    <p>- {{ auteur }}</p>
+    {% if image_auteur %}
+    <img src="{{ image_auteur }}" alt="Image de l'auteur">
+    {% else %}
+    <p>Image de l'auteur non disponible</p>
+    {% endif %}
+</body>
+</html>

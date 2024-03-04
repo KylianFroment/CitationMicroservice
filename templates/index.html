@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche YouTube</title>
+    <style>
+        .video-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .video-item {
+            margin: 10px;
+        }
+        .video-item img {
+            width: 200px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recherche YouTube</h1>
+    <form id="search-form">
+        <input type="text" id="query" name="query" placeholder="Entrez votre recherche...">
+        <button type="submit">Rechercher</button>
+    </form>
+    <div class="video-container" id="video-results">
+        <!-- Les résultats de la recherche seront affichés ici -->
+    </div>
+
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var query = document.getElementById('query').value;
+            searchYouTube(query);
+        });
+
+        function searchYouTube(query) {
+            fetch('/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'query': query
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data.youtube_results);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function displayResults(results) {
+            var videoContainer = document.getElementById('video-results');
+            videoContainer.innerHTML = '';
+            results.forEach(function(result) {
+                var videoItem = document.createElement('div');
+                videoItem.classList.add('video-item');
+                var thumbnail = document.createElement('img');
+                thumbnail.src = result.thumbnail;
+                var title = document.createElement('p');
+                title.textContent = result.title;
+                var link = document.createElement('a');
+                link.href = result.url;
+                link.textContent = 'Regarder';
+                videoItem.appendChild(thumbnail);
+                videoItem.appendChild(title);
+                videoItem.appendChild(link);
+                videoContainer.appendChild(videoItem);
+            });
+        }
+    </script>
+</body>
+</html>
